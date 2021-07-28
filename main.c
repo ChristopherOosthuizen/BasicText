@@ -1,19 +1,47 @@
 #include <unistd.h>
 #include <ncurses.h>
 #include "TextStorage.h"
+#include <stdio.h>
 
 int main() {
 	TextStorage* str = createTextStorage();
 	initscr();
 	noecho();
+	clear();
+	cbreak();
+	keypad(stdscr, true);
+	refresh();
+	int x = 0;
+	int y = 0;
 	while(TRUE) {
 		char c = getch();
 		switch(c) {
-			case 127: backSpaceTextStorage(str); break;
-			default: appendTextStorage(str, c); break;
+			case 2: {
+								y++;
+								move(y+1,x); break; // DOWN
+							}
+			case 3: {
+								y--;
+								move(y-1, x); break; // UP
+							}
+			case 4: {
+								x--;
+								move(y, x-1); break; // LEFT
+							}
+			case 5: {
+								x++;
+								move(y, x+1); break; // RIGHT
+							}
+			case 127: backSpaceTextStorage(str); break; // Delete key
+			default: {
+								x++;
+								appendTextStorage(str, c); break;
+							 }
 		}
-		clear();
-		addstr(getTextStorageText(str));
+		if(c > 5) {
+			clear();
+			addstr(getTextStorageText(str));
+		}
 		refresh();
 	}
 	endwin();
