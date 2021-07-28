@@ -22,8 +22,9 @@ void addLine(TextStorage* str) {
 	str->strings[str->length-1] = createDynamicString();	
 }
 
-// Add a char at the end of TextStorage
-// If appending would make the length exceed size Then increase text size
+// Add chacter to the top of the text storage
+// if the new character is a newline character
+// expand string stack
 void appendTextStorage(TextStorage* str, char c) {
 	if(c == '\n') {
 		addLine(str);
@@ -33,8 +34,14 @@ void appendTextStorage(TextStorage* str, char c) {
 }
 
 // Delete character at the front of the Text Storage
+// If ther is not text on the line and at the top of file do nothing
 void backSpaceTextStorage(TextStorage* str) {
-	backSpaceDynamicString(str->strings[0]);
+	if(str->strings[str->length-1]->length <= 0 && str->length > 1){
+		str->length--;
+		freeDynamicString(str->strings[str->length]);
+	} else {
+		backSpaceDynamicString(str->strings[str->length-1]);
+	}
 }
 
 // Free all the allocated memory for TextStorage
@@ -43,7 +50,8 @@ void freeTextStorage(TextStorage* str) {
 	free(str);
 }
 
-// Preform any preprocessing TextStorage needs
+// Create the string reprecentation of text storage
+// Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
 	for(int i = 0; i < str->length; i++) {
@@ -52,6 +60,7 @@ DynamicString* getTextStorageText(TextStorage* str) {
 		}
 		insertDynamicString(total, '\n');
 	}
+	backSpaceDynamicString(total);
 	return total;
 }
 

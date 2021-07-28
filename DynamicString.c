@@ -8,7 +8,7 @@ DynamicString* createDynamicString() {
 	return str;
 }
 
-// Add a char at the end of TextStorage
+// Add a char at the end of DynamicString
 // If appending would make the length exceed size Then increase text size
 void insertDynamicString(DynamicString* str, char c) {
 	str->length++;
@@ -20,7 +20,7 @@ void insertDynamicString(DynamicString* str, char c) {
 	str->str[str->length] = '\0';
 }
 
-// Delete character at the front of the Text Storage
+// Delete character at the front of the DynamicString 
 void backSpaceDynamicString(DynamicString* str) {
 	if(str->length > 0) {
 		str->length--;
@@ -28,7 +28,7 @@ void backSpaceDynamicString(DynamicString* str) {
 	}
 }
 
-// Free all the allocated memory for TextStorage
+// Free all the allocated memory for DynamicString 
 void freeDynamicString(DynamicString* str) {
 	free(str->str);
 	free(str);
