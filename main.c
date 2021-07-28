@@ -40,7 +40,9 @@ int main() {
 		}
 		if(c > 5) {
 			clear();
-			addstr(getTextStorageText(str));
+			DynamicString* display_str = getTextStorageText(str);
+			addstr(display_str->str);
+			freeDynamicString(display_str);
 		}
 		refresh();
 	}

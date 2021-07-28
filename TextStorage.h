@@ -1,10 +1,10 @@
 #ifndef TEXTSTORAGE_H
 #define TEXTSTORAGE_H 
-#include <stdlib.h>
+#include "DynamicString.h"
 
 
 typedef struct {
-	char* str;
+	DynamicString** strings;
 	size_t size;
 	size_t length;
 } TextStorage;
@@ -14,5 +14,5 @@ extern TextStorage* createTextStorage();
 extern void appendTextStorage(TextStorage* str, char c);
 extern void backSpaceTextStorage(TextStorage* str);
 extern void freeTextStorage(TextStorage* str);
-extern char* getTextStorageText(TextStorage* str);
+extern DynamicString* getTextStorageText(TextStorage* str);
 #endif // TextStorage
