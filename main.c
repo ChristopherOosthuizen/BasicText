@@ -13,7 +13,7 @@ int main() {
 			default: appendTextStorage(str, c); break;
 		}
 		clear();
-		addstr(str->str);
+		addstr(getTextStorageText(str));
 		refresh();
 	}
 	endwin();

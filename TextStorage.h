@@ -14,4 +14,5 @@ extern TextStorage* createTextStorage();
 extern void appendTextStorage(TextStorage* str, char c);
 extern void backSpaceTextStorage(TextStorage* str);
 extern void freeTextStorage(TextStorage* str);
+extern char* getTextStorageText(TextStorage* str);
 #endif // TextStorage
