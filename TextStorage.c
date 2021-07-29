@@ -27,16 +27,8 @@ void addLine(TextStorage* str) {
 		str->strings[i] = str->strings[i-1];
 	}
 
-	DynamicString* newline = createDynamicString();
-	for(int i = str->x; i < str->strings[str->y]->length; i++) {
-		insertDynamicString(newline, str->strings[str->y]->str[i], i);	
-	}
-	str->strings[str->y]->str[str->x] = '\0'; 
-	str->strings[str->y]->length -= str->strings[str->y]->length-str->x;
-	str->y++;
-	str->strings[str->y] = newline; 
-
-
+	DynamicString* newline = splitDynamicString(str->strings[str->y],str->x);
+	str->strings[++str->y] = newline; 
 }
 
 // Add chacter to the top of the text storage
@@ -91,9 +83,7 @@ void backSpaceTextStorage(TextStorage* str) {
 		str->length--;
 		str->y--;
 		str->x = str->strings[str->y]->length;
-		for(int i = 0; i < str->strings[str->y+1]->length; i++) {
-			insertDynamicString(str->strings[str->y], str->strings[str->y+1]->str[i],str->strings[str->y]->length);
-		}
+		addDynamicStrings(str->strings[str->y], str->strings[str->y+1]);
 		freeDynamicString(str->strings[str->y+1]);
 	} else {
 		str->x--;
@@ -112,14 +102,9 @@ void freeTextStorage(TextStorage* str) {
 // Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
-	int x = 0;
 	for(int i = 0; i < str->length; i++) {
-		for(int j = 0; j < str->strings[i]->length; j++) {
-			insertDynamicString(total, str->strings[i]->str[j], x);
-			x++;
-		}
-		insertDynamicString(total, '\n',x);
-		x++;
+		addDynamicStrings(total, str->strings[i]);	
+		insertDynamicString(total, '\n', total->length);
 	}
 	backSpaceDynamicString(total,total->length);
 	return total;

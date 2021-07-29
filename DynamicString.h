@@ -19,4 +19,6 @@ extern void insertDynamicString(DynamicString* str, char c, int index);
 extern void backSpaceDynamicString(DynamicString* str, int index);
 // Free dynamic string
 extern void freeDynamicString(DynamicString* str);
+extern void addDynamicStrings(DynamicString* str1, DynamicString* str2);
+extern DynamicString* splitDynamicString(DynamicString* str, int index);
 #endif // DynamicString

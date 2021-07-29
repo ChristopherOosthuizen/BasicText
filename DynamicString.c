@@ -27,6 +27,26 @@ void insertDynamicString(DynamicString* str, char c, int index) {
   str->str[index] = c;
 }
 
+// Add two Dynamic strings by modifiying str1 but leaving str2 unchanged
+void addDynamicStrings(DynamicString* str1, DynamicString* str2) {
+	for(int i = 0; i < str2->length; i++) {
+		insertDynamicString(str1,str2->str[i], str1->length);
+	}
+}
+
+// Split a dynamic string into two parts modifing the input and retruning
+// a new dynamic string holding the rest of the content
+DynamicString* splitDynamicString(DynamicString* str, int index) {
+	DynamicString* newline = createDynamicString();
+	for(int i = index; i < str->length; i++) {
+		insertDynamicString(newline, str->str[i], i);	
+	}
+	str->str[index] = '\0'; 
+	str->length -= str->length-index;
+	return newline;
+		
+}
+
 // Delete character at the front of the DynamicString 
 void backSpaceDynamicString(DynamicString* str, int index) {
 	if(str->length > 0) {
