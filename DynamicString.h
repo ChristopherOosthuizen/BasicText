@@ -13,9 +13,9 @@ typedef struct {
 extern DynamicString* createDynamicString(); 
 // Insert a character at the front of the dynamic string
 // ex: insertDynamicString(str, 'c'); c is now at the top of the string
-extern void insertDynamicString(DynamicString* str, char c);
+extern void insertDynamicString(DynamicString* str, char c, int index);
 // Delete the character at the front the dynamic string
-extern void backSpaceDynamicString(DynamicString* str);
+extern void backSpaceDynamicString(DynamicString* str, int index);
 // Free dynamic string
 extern void freeDynamicString(DynamicString* str);
 #endif // DynamicString

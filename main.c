@@ -12,40 +12,15 @@ int main() {
 	keypad(stdscr, true);
 	refresh();
 	timeout(30000);
-	int x = 0;
-	int y = 0;
 	while(TRUE) {
 		char c = getch();
-			switch(c) {
-				case 2: {
-									y++;
-									move(y+1,x); break; // DOWN
-								}
-				case 3: {
-									y--;
-									move(y-1, x); break; // UP
-								}
-				case 4: {
-									x--;
-									move(y, x-1); break; // LEFT
-								}
-				case 5: {
-									x++;
-									move(y, x+1); break; // RIGHT
-								}
-				case 127: backSpaceTextStorage(str); break; // Delete key
-				default: {
-									x++;
-									appendTextStorage(str, c); break;
-								 }
-		}
-		if(c > 5 ) {
-			clear();
-			DynamicString* display_str = getTextStorageText(str);
-			addstr(display_str->str);
-			freeDynamicString(display_str);
-		}
+		appendTextStorage(str,c); 
+		clear();
+		DynamicString* display_str = getTextStorageText(str);
+		addstr(display_str->str);
+		freeDynamicString(display_str);
 		refresh();
+		move(str->y, str->x);
 	}
 	endwin();
 	freeTextStorage(str);

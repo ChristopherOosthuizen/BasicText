@@ -5,6 +5,8 @@ TextStorage* createTextStorage() {
 	TextStorage* str = (TextStorage*)malloc(sizeof(TextStorage));
 	str->size = 2;
 	str->length = 1;
+	str->x = 0;
+	str->y = 0;
 	str->strings = (DynamicString**)malloc(str->size+1);
 	str->strings[0] = createDynamicString();
 	return str;
@@ -26,11 +28,36 @@ void addLine(TextStorage* str) {
 // if the new character is a newline character
 // expand string stack
 void appendTextStorage(TextStorage* str, char c) {
-	if(c == '\n') {
-		addLine(str);
-	} else{
-		insertDynamicString(str->strings[str->length-1], c);
+	switch(c) {
+		case 2: str->y++; break; // DOWN
+		case 3: str->y--; break; // UP
+		case 4: str->x--; break; // LEFT
+		case 5: str->x++; break; // RIGHT
+		case 127: backSpaceTextStorage(str); break; // Delete key
+		case '\n': {
+									addLine(str);
+									str->x = 0;
+									str->y++; break;
+							 }
+		default: {
+							insertDynamicString(str->strings[str->y],  c,str->x );
+							str->x++; break;
+						 }
 	}
+	if(str->y < 0) {
+		str->y = 0;
+	}
+	if(str->length <= str->y) {
+		str->y = str->length-1;
+	}
+
+	if(str->x < 0) {
+		str->x = 0;	
+	}
+	if(str->x >= str->strings[str->y]->length) {
+		str->x = str->strings[str->y]->length;
+	}
+
 }
 
 // Delete character at the front of the Text Storage
@@ -38,9 +65,11 @@ void appendTextStorage(TextStorage* str, char c) {
 void backSpaceTextStorage(TextStorage* str) {
 	if(str->strings[str->length-1]->length <= 0 && str->length > 1){
 		str->length--;
+		str->y--;
 		freeDynamicString(str->strings[str->length]);
 	} else {
-		backSpaceDynamicString(str->strings[str->length-1]);
+		str->x--;
+		backSpaceDynamicString(str->strings[str->length-1], str->x);
 	}
 }
 
@@ -54,13 +83,16 @@ void freeTextStorage(TextStorage* str) {
 // Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
+	int x = 0;
 	for(int i = 0; i < str->length; i++) {
 		for(int j = 0; j < str->strings[i]->length; j++) {
-			insertDynamicString(total, str->strings[i]->str[j]);
+			insertDynamicString(total, str->strings[i]->str[j], x);
+			x++;
 		}
-		insertDynamicString(total, '\n');
+		insertDynamicString(total, '\n',x);
+		x++;
 	}
-	backSpaceDynamicString(total);
+	backSpaceDynamicString(total,total->length);
 	return total;
 }
 

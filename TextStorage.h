@@ -7,6 +7,8 @@ typedef struct {
 	DynamicString** strings;
 	size_t size;
 	size_t length;
+	int x;
+	int y;
 } TextStorage;
 
 

@@ -10,19 +10,24 @@ DynamicString* createDynamicString() {
 
 // Add a char at the end of DynamicString
 // If appending would make the length exceed size Then increase text size
-void insertDynamicString(DynamicString* str, char c) {
+void insertDynamicString(DynamicString* str, char c, int index) {
 	str->length++;
 	if(str->size <= str->length) {
 		str->size *= 2;
 		str->str = (char*)realloc(str->str, str->size+1);
 	}
-	str->str[str->length-1] = c;
-	str->str[str->length] = '\0';
+	for(int i = str->length-1; i >= index; i--) {
+		str->str[i] = str->str[i-1];
+	}
+  str->str[index] = c;
 }
 
 // Delete character at the front of the DynamicString 
-void backSpaceDynamicString(DynamicString* str) {
+void backSpaceDynamicString(DynamicString* str, int index) {
 	if(str->length > 0) {
+		for(int i = index; i < str->length-1; i++) {
+			str->str[i] = str->str[i+1];
+		}
 		str->length--;
 		str->str[str->length] = '\0';
 	}
