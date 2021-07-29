@@ -1,4 +1,6 @@
 #include "TextStorage.h"
+#include <ncurses.h>
+
 
 // Initialize TextStorage object 
 TextStorage* createTextStorage() {
@@ -29,6 +31,15 @@ void addLine(TextStorage* str) {
 // expand string stack
 void appendTextStorage(TextStorage* str, char c) {
 	switch(c) {
+		case -103: {
+											MEVENT event;
+											if(getmouse(&event) == OK) {
+												str->x = event.x;
+												str->y = event.y-1;
+											}
+											break;
+										}
+		case 18: backSpaceTextStorage(str);break;
 		case 2: str->y++; break; // DOWN
 		case 3: str->y--; break; // UP
 		case 4: str->x--; break; // LEFT
@@ -69,7 +80,7 @@ void backSpaceTextStorage(TextStorage* str) {
 		freeDynamicString(str->strings[str->length]);
 	} else {
 		str->x--;
-		backSpaceDynamicString(str->strings[str->length-1], str->x);
+		backSpaceDynamicString(str->strings[str->y], str->x);
 	}
 }
 

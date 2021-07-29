@@ -1,6 +1,7 @@
 #ifndef DYNAMICSTRING_H
 #define DYNAMICSTRING_H
 #include <stdlib.h>
+#define CTRL(c) ((c) & 037)
 
 typedef struct {
 	char* str;
