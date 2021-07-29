@@ -12,7 +12,6 @@ int main() {
 	keypad(stdscr, true);
 	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
 	refresh();
-	timeout(30000);
 	while(TRUE) {
 		char c = getch();
 		if(c == 1) {

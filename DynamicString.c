@@ -16,6 +16,11 @@ void insertDynamicString(DynamicString* str, char c, int index) {
 		str->size *= 2;
 		str->str = (char*)realloc(str->str, str->size+1);
 	}
+	if(index >= str->length-1) {
+		str->str[str->length-1] = c;
+		str->str[str->length] = '\0';
+		return;
+	}
 	for(int i = str->length-1; i >= index; i--) {
 		str->str[i] = str->str[i-1];
 	}
