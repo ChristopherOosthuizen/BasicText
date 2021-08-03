@@ -54,6 +54,32 @@ void handleMouse(TextStorage* str) {
 
 }
 
+// Check weather x and y are in legal distances
+// Check weather top and bottom have changed
+void checkXY(TextStorage* str) {
+	if(str->y < 0) {
+		str->y = 0;
+	}
+	if(str->length <= str->y) {
+		str->y = str->length-1;
+	}else if(str->topSet && str->y > str->bottom) {
+		str->top += str->y-str->bottom;
+		str->bottom = str->y;
+	}else if(str->topSet && str->y < str->top) {
+		str->bottom -= str->top-str->y;
+		str->top = str->y;
+	}
+
+	if(str->x < 0) {
+		str->x = 0;	
+	}
+	if(str->x >= str->strings[str->y]->length) {
+		str->x = str->strings[str->y]->length;
+	}
+
+
+}
+
 // Add chacter to the top of the text storage
 // if the new character is a newline character
 // expand string stack
@@ -76,26 +102,7 @@ void appendTextStorage(TextStorage* str, char c) {
 							str->x++; break;
 						 }
 	}
-	if(str->y < 0) {
-		str->y = 0;
-	}
-	if(str->length <= str->y) {
-		str->y = str->length-1;
-	}else if(str->topSet && str->y > str->bottom) {
-		str->top += str->y-str->bottom;
-		str->bottom = str->y;
-	}else if(str->topSet && str->y < str->top) {
-		str->bottom -= str->top-str->y;
-		str->top = str->y;
-	}
-
-	if(str->x < 0) {
-		str->x = 0;	
-	}
-	if(str->x >= str->strings[str->y]->length) {
-		str->x = str->strings[str->y]->length;
-	}
-
+	 checkXY(str);
 }
 
 // Delete character at the front of the Text Storage
@@ -124,7 +131,7 @@ void freeTextStorage(TextStorage* str) {
 // Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
-	for(int i = str->top; i < str->bottom && i < str->length; i++) {
+	for(int i = str->top; i <= str->bottom && i < str->length; i++) {
 
 		addDynamicStrings(total, str->strings[i]);	
 		insertDynamicString(total, '\n', total->length);

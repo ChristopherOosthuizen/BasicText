@@ -44,7 +44,7 @@ void displayTextStorage(TextStorage* storage) {
 
 int main(int argc, char* argv[]) {
 	TextStorage* str = createTextStorage();
-	if(argc > 1) {
+	if(argc > 1 && access(argv[1], F_OK) == 0) {
 		readFileContent(argv[1], str);
 	}
 	initscr();
@@ -63,10 +63,10 @@ int main(int argc, char* argv[]) {
 	int bottom;
 	int top;
 	if(height < str->y) {
-		bottom = height;
+		bottom = str->y;
 		top = str->length-height;
 	} else {
-		bottom = height;
+		bottom = height-1;
 		top = 0;
 	}
 	
