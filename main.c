@@ -2,6 +2,7 @@
 #include <ncurses.h>
 #include "TextStorage.h"
 #include <stdio.h>
+#include <sys/ioctl.h>
 
 void readFileContent(char* file_name, TextStorage* storage) {
 		FILE* file;
@@ -20,7 +21,13 @@ void readFileContent(char* file_name, TextStorage* storage) {
 void writeToFile(char* file_name, TextStorage* storage) {
 	FILE* file;
 	file = fopen(file_name, "w+");
+	int top = storage->top;
+	int bottom = storage->bottom;
+	
+	setTopBottom(storage,0, storage->length);
 	DynamicString* content = getTextStorageText(storage); 
+	setTopBottom(storage,top, bottom);
+
 	fprintf(file, content->str); 
 	freeDynamicString(content);
 	fclose(file);
@@ -32,7 +39,7 @@ void displayTextStorage(TextStorage* storage) {
 	addstr(display_str->str);
 	freeDynamicString(display_str);
 	refresh();
-	move(storage->y, storage->x);
+	move(storage->y -storage->top, storage->x);
 }
 
 int main(int argc, char* argv[]) {
@@ -46,12 +53,27 @@ int main(int argc, char* argv[]) {
 	clear();
 	cbreak();
 	keypad(stdscr, true);
-	mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
+	mouseinterval(0);
+	mousemask(BUTTON1_PRESSED | BUTTON2_PRESSED | BUTTON3_PRESSED | 
+		REPORT_MOUSE_POSITION, NULL);
+	struct winsize window_size;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
+	int height = window_size.ws_row; 
+	int width = window_size.ws_col;
+	int bottom;
+	int top;
+	if(height < str->y) {
+		bottom = str->length;
+		top = str->length-height;
+	} else {
+		bottom = str->length;
+		top = 0;
+	}
+	
+	setTopBottom(str, top, bottom);
 	displayTextStorage(str);
 	while(TRUE) {
 		char c = getch();
-		endwin(); 
-
 		if(c == 17) {
 			break;
 		} else if(c == 19) {
@@ -60,7 +82,6 @@ int main(int argc, char* argv[]) {
 			appendTextStorage(str,c); 
 		}
 		displayTextStorage(str);
-
 
 		}
 	endwin();

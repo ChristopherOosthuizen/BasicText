@@ -9,10 +9,20 @@ TextStorage* createTextStorage() {
 	str->length = 1;
 	str->x = 0;
 	str->y = 0;
+	str->top = 0;
+	str->bottom = 0; 
+	str->topSet = 0;
 	str->strings = (DynamicString**)malloc(str->size+1);
 	str->strings[0] = createDynamicString();
 	return str;
 
+}
+
+// Set the top and bottom for displaying purposes
+void setTopBottom(TextStorage* storage, int top, int bottom) {
+		storage->top  = top;
+		storage->bottom = bottom;
+		storage->topSet = 1;
 }
 
 // Create a new line at the end of the Text storage and if length excedes 
@@ -31,19 +41,25 @@ void addLine(TextStorage* str) {
 	str->strings[++str->y] = newline; 
 }
 
+void handleMouse(TextStorage* str) {
+	MEVENT event;
+	if(getmouse(&event) == OK) {
+		if(event.bstate & BUTTON1_PRESSED) {
+			str->x = event.x;
+			str->y = str->top + event.y;
+		}else if(event.bstate & BUTTON4_PRESSED) {
+			appendTextStorage(str, 'a');
+		}
+	}
+
+}
+
 // Add chacter to the top of the text storage
 // if the new character is a newline character
 // expand string stack
 void appendTextStorage(TextStorage* str, char c) {
 	switch(c) {
-		case -103: {
-											MEVENT event;
-											if(getmouse(&event) == OK) {
-												str->x = event.x;
-												str->y = event.y;
-											}
-											break;
-										}
+		case -103: handleMouse(str);break;
 		case 18: backSpaceTextStorage(str);break;
 		case 2: str->y++; break; // DOWN
 		case 3: str->y--; break; // UP
@@ -65,6 +81,12 @@ void appendTextStorage(TextStorage* str, char c) {
 	}
 	if(str->length <= str->y) {
 		str->y = str->length-1;
+	}else if(str->topSet && str->y > str->bottom) {
+		str->top += str->y-str->bottom;
+		str->bottom = str->y;
+	}else if(str->topSet && str->y < str->top) {
+		str->bottom -= str->top-str->y;
+		str->top = str->y;
 	}
 
 	if(str->x < 0) {
@@ -102,7 +124,8 @@ void freeTextStorage(TextStorage* str) {
 // Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
-	for(int i = 0; i < str->length; i++) {
+	for(int i = str->top; i < str->bottom; i++) {
+
 		addDynamicStrings(total, str->strings[i]);	
 		insertDynamicString(total, '\n', total->length);
 	}
