@@ -63,10 +63,10 @@ int main(int argc, char* argv[]) {
 	int bottom;
 	int top;
 	if(height < str->y) {
-		bottom = str->length;
+		bottom = height;
 		top = str->length-height;
 	} else {
-		bottom = str->length;
+		bottom = height;
 		top = 0;
 	}
 	
