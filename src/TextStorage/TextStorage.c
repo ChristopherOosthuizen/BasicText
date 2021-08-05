@@ -11,6 +11,7 @@ TextStorage* createTextStorage() {
 	str->y = 0;
 	str->bottom = 0; 
 	str->topSet = 0;
+	str->tabSize = 2;
 	str->strings = (DynamicString**)malloc(str->size+1);
 	str->strings[0] = createDynamicString();
 	str->height = 0;
@@ -117,6 +118,13 @@ void appendTextStorage(TextStorage* str, char c) {
 									addLine(str);
 									str->x = 0;
 									break;
+							 }
+		case '\t': {
+								for(int i = 0; i < str->tabSize; i++) {
+									insertDynamicString(str->strings[str->y], ' ', str->x);	
+									str->x++; 
+								}
+								break;
 							 }
 		default: {
 							insertDynamicString(str->strings[str->y],  c,str->x );

@@ -43,6 +43,15 @@ void displayTextStorage(TextStorage* storage) {
 	move(storage->y -top, storage->x);
 }
 
+void setHeight(TextStorage* str) {
+	struct winsize window_size;
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
+	int height = window_size.ws_row; 
+		setTopBottom(str,height-1, str->bottom);
+
+	
+}
+
 int main(int argc, char* argv[]) {
 	TextStorage* str = createTextStorage();
 	if(argc > 1 && access(argv[1], F_OK) == 0) {
@@ -79,6 +88,7 @@ int main(int argc, char* argv[]) {
 			appendTextStorage(str,c); 
 		}
 		displayTextStorage(str);
+		setHeight(str);
 
 		}
 	endwin();

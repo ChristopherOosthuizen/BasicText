@@ -12,6 +12,7 @@ typedef struct {
 	int height;
 	int bottom;
 	int topSet;
+	int tabSize;
 } TextStorage;
 
 
