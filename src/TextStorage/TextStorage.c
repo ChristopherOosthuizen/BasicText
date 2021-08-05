@@ -1,4 +1,4 @@
-#include "TextStorage.h"
+#include "../TextStorage/TextStorage.h"
 #include <ncurses.h>
 
 
@@ -80,6 +80,35 @@ void checkXY(TextStorage* str) {
 
 }
 
+void pageUp(TextStorage* storage) {
+	int height = storage->bottom- storage->top;
+
+	if(storage->bottom + height >= storage->length) {
+		storage->y = storage->length;
+		storage->bottom = storage->length;
+		storage->top = storage->length-height;
+		return;
+	}
+	storage->bottom += height;
+	storage->top += height;
+	storage->y += storage->bottom;
+
+}
+
+void pageDown(TextStorage* storage) {
+	int height = storage->bottom- storage->top;
+	if(storage->top-height <= 0) {
+		storage->y = 0;
+		storage->top = 0;
+		storage->bottom = height;
+		return;
+	}
+	storage->bottom -= height;
+	storage->top -= height;
+	storage->y -=storage->bottom ;
+
+}
+
 // Add chacter to the top of the text storage
 // if the new character is a newline character
 // expand string stack
@@ -87,6 +116,8 @@ void appendTextStorage(TextStorage* str, char c) {
 	switch(c) {
 		case -103: handleMouse(str);break;
 		case 18: backSpaceTextStorage(str);break;
+		case 16: pageUp(str); break;
+		case 21: pageDown(str); break;
 		case 2: str->y++; break; // DOWN
 		case 3: str->y--; break; // UP
 		case 4: str->x--; break; // LEFT

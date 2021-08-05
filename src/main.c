@@ -1,6 +1,6 @@
 #include <unistd.h>
 #include <ncurses.h>
-#include "TextStorage.h"
+#include "TextStorage/TextStorage.h"
 #include <stdio.h>
 #include <sys/ioctl.h>
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 	cbreak();
 	keypad(stdscr, true);
 	mouseinterval(0);
-	mousemask(BUTTON1_PRESSED | BUTTON2_PRESSED | BUTTON3_PRESSED | 
+	mousemask(BUTTON1_PRESSED | BUTTON2_PRESSED | BUTTON3_PRESSED |
 		REPORT_MOUSE_POSITION, NULL);
 	struct winsize window_size;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
@@ -69,7 +69,6 @@ int main(int argc, char* argv[]) {
 		bottom = height-1;
 		top = 0;
 	}
-	
 	setTopBottom(str, top, bottom);
 	displayTextStorage(str);
 	while(TRUE) {

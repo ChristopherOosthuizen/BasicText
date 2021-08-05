@@ -1,6 +1,6 @@
 #ifndef TEXTSTORAGE_H
 #define TEXTSTORAGE_H 
-#include "DynamicString.h"
+#include "../DynamicString/DynamicString.h"
 
 
 typedef struct {
