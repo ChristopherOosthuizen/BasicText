@@ -21,12 +21,12 @@ void readFileContent(char* file_name, TextStorage* storage) {
 void writeToFile(char* file_name, TextStorage* storage) {
 	FILE* file;
 	file = fopen(file_name, "w+");
-	int top = storage->top;
+	int height = storage->height;
 	int bottom = storage->bottom;
 	
-	setTopBottom(storage,0, storage->length);
+	setTopBottom(storage,storage->length, storage->length);
 	DynamicString* content = getTextStorageText(storage); 
-	setTopBottom(storage,top, bottom);
+	setTopBottom(storage,height, bottom);
 
 	fprintf(file, content->str); 
 	freeDynamicString(content);
@@ -39,7 +39,8 @@ void displayTextStorage(TextStorage* storage) {
 	addstr(display_str->str);
 	freeDynamicString(display_str);
 	refresh();
-	move(storage->y -storage->top, storage->x);
+	int top = storage->bottom-storage->height;
+	move(storage->y -top, storage->x);
 }
 
 int main(int argc, char* argv[]) {
@@ -61,15 +62,12 @@ int main(int argc, char* argv[]) {
 	int height = window_size.ws_row; 
 	int width = window_size.ws_col;
 	int bottom;
-	int top;
 	if(height < str->y) {
 		bottom = str->y;
-		top = str->length-height;
 	} else {
 		bottom = height-1;
-		top = 0;
 	}
-	setTopBottom(str, top, bottom);
+	setTopBottom(str, height-1, bottom);
 	displayTextStorage(str);
 	while(TRUE) {
 		char c = getch();

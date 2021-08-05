@@ -9,7 +9,7 @@ typedef struct {
 	size_t length;
 	int x;
 	int y;
-	int top;
+	int height;
 	int bottom;
 	int topSet;
 } TextStorage;
@@ -20,5 +20,5 @@ extern void appendTextStorage(TextStorage* str, char c);
 extern void backSpaceTextStorage(TextStorage* str);
 extern void freeTextStorage(TextStorage* str);
 extern DynamicString* getTextStorageText(TextStorage* str);
-extern void setTopBottom(TextStorage* storage, int top, int bottom);
+extern void setTopBottom(TextStorage* storage, int height, int bottom);
 #endif // TextStorage

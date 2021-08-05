@@ -9,18 +9,18 @@ TextStorage* createTextStorage() {
 	str->length = 1;
 	str->x = 0;
 	str->y = 0;
-	str->top = 0;
 	str->bottom = 0; 
 	str->topSet = 0;
 	str->strings = (DynamicString**)malloc(str->size+1);
 	str->strings[0] = createDynamicString();
+	str->height = 0;
 	return str;
 
 }
 
 // Set the top and bottom for displaying purposes
-void setTopBottom(TextStorage* storage, int top, int bottom) {
-		storage->top  = top;
+void setTopBottom(TextStorage* storage, int height, int bottom) {
+		storage->height = height;
 		storage->bottom = bottom;
 		storage->topSet = 1;
 }
@@ -46,7 +46,7 @@ void handleMouse(TextStorage* str) {
 	if(getmouse(&event) == OK) {
 		if(event.bstate & BUTTON1_PRESSED) {
 			str->x = event.x;
-			str->y = str->top + event.y;
+			str->y = str->bottom-str->height + event.y;
 		}else if(event.bstate & BUTTON4_PRESSED) {
 			appendTextStorage(str, 'a');
 		}
@@ -63,11 +63,9 @@ void checkXY(TextStorage* str) {
 	if(str->length <= str->y) {
 		str->y = str->length-1;
 	}else if(str->topSet && str->y > str->bottom) {
-		str->top += str->y-str->bottom;
 		str->bottom = str->y;
-	}else if(str->topSet && str->y < str->top) {
-		str->bottom -= str->top-str->y;
-		str->top = str->y;
+	}else if(str->topSet && str->y < str->bottom-str->height) {
+		str->bottom -= str->bottom-str->height-str->y;
 	}
 
 	if(str->x < 0) {
@@ -81,30 +79,22 @@ void checkXY(TextStorage* str) {
 }
 
 void pageUp(TextStorage* storage) {
-	int height = storage->bottom- storage->top;
-
-	if(storage->bottom + height >= storage->length) {
+	if(storage->bottom + storage->height >= storage->length) {
 		storage->y = storage->length;
 		storage->bottom = storage->length;
-		storage->top = storage->length-height;
 		return;
 	}
-	storage->bottom += height;
-	storage->top += height;
+	storage->bottom += storage->height;
 	storage->y += storage->bottom;
-
 }
 
 void pageDown(TextStorage* storage) {
-	int height = storage->bottom- storage->top;
-	if(storage->top-height <= 0) {
+	if(storage->bottom-storage->height*2 <= 0) {
 		storage->y = 0;
-		storage->top = 0;
-		storage->bottom = height;
+		storage->bottom = storage->height;
 		return;
 	}
-	storage->bottom -= height;
-	storage->top -= height;
+	storage->bottom -= storage->height;
 	storage->y -=storage->bottom ;
 
 }
@@ -162,7 +152,7 @@ void freeTextStorage(TextStorage* str) {
 // Intended to be used as the text showed to the user
 DynamicString* getTextStorageText(TextStorage* str) {
 	DynamicString* total = createDynamicString();
-	for(int i = str->top; i <= str->bottom && i < str->length; i++) {
+	for(int i = str->bottom-str->height; i <= str->bottom && i < str->length; i++) {
 
 		addDynamicStrings(total, str->strings[i]);	
 		insertDynamicString(total, '\n', total->length);
