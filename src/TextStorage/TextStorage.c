@@ -169,3 +169,15 @@ DynamicString* getTextStorageText(TextStorage* str) {
 	return total;
 }
 
+// Create the string reprecentation of text storage
+// Intended to be used as the text showed to the user
+DynamicString* getTextStorageTextColor(TextStorage* str) {
+	DynamicString* total = createDynamicString();
+	for(int i = str->bottom-str->height; i <= str->bottom && i < str->length; i++) {
+		addDynamicStrings(total, str->strings[i]);	
+		insertDynamicString(total, '\n', total->length);
+	}
+	backSpaceDynamicString(total,total->length);
+	return total;
+}
+

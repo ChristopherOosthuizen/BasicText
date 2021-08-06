@@ -35,12 +35,20 @@ void writeToFile(char* file_name, TextStorage* storage) {
 
 void displayTextStorage(TextStorage* storage) {
 	clear();
-	DynamicString* display_str = getTextStorageText(storage);
-	addstr(display_str->str);
-	freeDynamicString(display_str);
-	refresh();
+
+	//attron(COLOR_PAIR(1));
 	int top = storage->bottom-storage->height;
-	move(storage->y -top, storage->x);
+
+	for(int i = top; i< storage->length &&i< storage->bottom; i++) {
+			printw("%5d| ", i-top);
+			addstr(storage->strings[i]->str);
+			addstr("\n");
+	}
+	//attroff(COLOR_PAIR(1));
+
+	refresh();
+	move(storage->y -top, storage->x+7);
+
 }
 
 void setHeight(TextStorage* str) {
@@ -77,8 +85,11 @@ int main(int argc, char* argv[]) {
 		bottom = height-1;
 	}
 	setTopBottom(str, height-1, bottom);
+	start_color();
+	init_pair(1, COLOR_BLACK, COLOR_YELLOW);
+
 	displayTextStorage(str);
-	while(TRUE) {
+		while(TRUE) {
 		char c = getch();
 		if(c == 17) {
 			break;
