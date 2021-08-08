@@ -137,12 +137,15 @@ void appendTextStorage(TextStorage* str, char c) {
 // Delete character at the front of the Text Storage
 // If ther is not text on the line and at the top of file do nothing
 void backSpaceTextStorage(TextStorage* str) {
-	if(str->length > 1 && str->y > 0 && str->x < 1){
+	if(str->y > 0 && str->x < 1){
 		str->length--;
 		str->y--;
 		str->x = str->strings[str->y]->length;
 		addDynamicStrings(str->strings[str->y], str->strings[str->y+1]);
 		freeDynamicString(str->strings[str->y+1]);
+		for(int i=str->y+1; i < str->length; i++) {
+			str->strings[i]  = str->strings[i+1];
+		}
 	} else {
 		str->x--;
 		backSpaceDynamicString(str->strings[str->y], str->x);
