@@ -37,9 +37,9 @@ void displayTextStorage(TextStorage* storage) {
 	clear();
 
 	//attron(COLOR_PAIR(1));
-	int top = storage->bottom-storage->height+1;
+	int top = storage->bottom-storage->height;
 
-	for(int i = top; i< storage->length && i< storage->bottom; i++) {
+	for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
 			printw("%5d| ", i-top);
 			addstr(storage->strings[i]->str);
 			addstr("\n");
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
 	TextStorage* str = createTextStorage();
 	if(argc > 1 && access(argv[1], F_OK) == 0) {
 		readFileContent(argv[1], str);
-	}
+	} 
 	initscr();
 	raw();
 	noecho();
@@ -84,8 +84,6 @@ int main(int argc, char* argv[]) {
 	} else {
 		bottom = height-1;
 	}
-	char ch = getch(); endwin(); printf("KEY NAME : %s - %d\n", keyname(ch),ch);
-	return 0;
 	setTopBottom(str, height-1, bottom);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_YELLOW);

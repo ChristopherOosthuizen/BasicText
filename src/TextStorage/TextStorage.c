@@ -10,7 +10,6 @@ TextStorage* createTextStorage() {
 	str->x = 0;
 	str->y = 0;
 	str->bottom = 0; 
-	str->topSet = 0;
 	str->tabSize = 2;
 	str->strings = (DynamicString**)malloc(str->size+1);
 	str->strings[0] = createDynamicString();
@@ -23,7 +22,6 @@ TextStorage* createTextStorage() {
 void setTopBottom(TextStorage* storage, int height, int bottom) {
 		storage->height = height;
 		storage->bottom = bottom;
-		storage->topSet = 1;
 }
 
 // Create a new line at the end of the Text storage and if length excedes 
@@ -63,9 +61,9 @@ void checkXY(TextStorage* str) {
 	}
 	if(str->length <= str->y) {
 		str->y = str->length-1;
-	}else if(str->topSet && str->y > str->bottom) {
+	}else if(str->y > str->bottom) {
 		str->bottom = str->y;
-	}else if(str->topSet && str->y < str->bottom-str->height) {
+	}else if(str->y < str->bottom-str->height) {
 		str->bottom -= str->bottom-str->height-str->y;
 	}
 
@@ -139,7 +137,7 @@ void appendTextStorage(TextStorage* str, char c) {
 // Delete character at the front of the Text Storage
 // If ther is not text on the line and at the top of file do nothing
 void backSpaceTextStorage(TextStorage* str) {
-	if(str->y > 0 && str->x < 1){
+	if(str->length > 1 && str->y > 0 && str->x < 1){
 		str->length--;
 		str->y--;
 		str->x = str->strings[str->y]->length;
