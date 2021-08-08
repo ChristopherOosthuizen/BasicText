@@ -37,9 +37,9 @@ void displayTextStorage(TextStorage* storage) {
 	clear();
 
 	//attron(COLOR_PAIR(1));
-	int top = storage->bottom-storage->height;
+	int top = storage->bottom-storage->height+1;
 
-	for(int i = top; i< storage->length &&i< storage->bottom; i++) {
+	for(int i = top; i< storage->length && i< storage->bottom; i++) {
 			printw("%5d| ", i-top);
 			addstr(storage->strings[i]->str);
 			addstr("\n");

@@ -106,7 +106,8 @@ void pageDown(TextStorage* storage) {
 void appendTextStorage(TextStorage* str, char c) {
 	switch(c) {
 		case -103: handleMouse(str);break;
-		case 18: backSpaceTextStorage(str);break;
+		case 18: 
+		case 7: backSpaceTextStorage(str);break;
 		case 16: pageUp(str); break; // cntrl-p
 		case 21: pageDown(str); break; // cntrl-u
 
