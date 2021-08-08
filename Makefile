@@ -3,4 +3,4 @@ make:
 
 install:
 	make
-	cp ./a.out /usr/bin/cedit
+	cp ./a.out /usr/bin/btext

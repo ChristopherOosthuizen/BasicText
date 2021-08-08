@@ -117,10 +117,10 @@ void appendTextStorage(TextStorage* str, char c) {
 		case 5: str->x++; break; // RIGHT
 		case 127: backSpaceTextStorage(str); break; // Delete key
 		case '\n': {
-									addLine(str);
-									str->x = 0;
-									break;
-							 }
+								addLine(str);
+								str->x = 0;
+								break;
+						 }
 		case '\t': {
 								for(int i = 0; i < str->tabSize; i++) {
 									insertDynamicString(str->strings[str->y], ' ', str->x);	

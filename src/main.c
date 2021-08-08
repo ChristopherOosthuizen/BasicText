@@ -84,6 +84,8 @@ int main(int argc, char* argv[]) {
 	} else {
 		bottom = height-1;
 	}
+	char ch = getch(); endwin(); printf("KEY NAME : %s - %d\n", keyname(ch),ch);
+	return 0;
 	setTopBottom(str, height-1, bottom);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_YELLOW);
