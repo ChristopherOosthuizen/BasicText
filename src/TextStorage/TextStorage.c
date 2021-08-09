@@ -103,6 +103,7 @@ void pageDown(TextStorage* storage) {
 // expand string stack
 void appendTextStorage(TextStorage* str, char c) {
 	switch(c) {
+		case -102: break;
 		case -103: handleMouse(str);break;
 		case 18: 
 		case 7: backSpaceTextStorage(str);break;

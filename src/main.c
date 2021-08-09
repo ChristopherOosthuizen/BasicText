@@ -40,7 +40,7 @@ void displayTextStorage(TextStorage* storage) {
 	int top = storage->bottom-storage->height;
 
 	for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
-			printw("%5d| ", i-top);
+			printw("%5d| ", i);
 			addstr(storage->strings[i]->str);
 			addstr("\n");
 	}
@@ -84,6 +84,7 @@ int main(int argc, char* argv[]) {
 	} else {
 		bottom = height-1;
 	}
+
 	setTopBottom(str, height-1, bottom);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_YELLOW);
