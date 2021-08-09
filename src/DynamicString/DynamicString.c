@@ -25,6 +25,7 @@ void insertDynamicString(DynamicString* str, char c, int index) {
 		str->str[i] = str->str[i-1];
 	}
   str->str[index] = c;
+  str->str[str->length] = '\0';
 }
 
 // Add two Dynamic strings by modifiying str1 but leaving str2 unchanged
