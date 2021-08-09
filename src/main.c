@@ -105,6 +105,5 @@ int main(int argc, char* argv[]) {
 		}
 	endwin();
 	freeTextStorage(str);
-	printf("success");
 	return EXIT_SUCCESS;
 }
