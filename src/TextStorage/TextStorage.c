@@ -44,7 +44,7 @@ void handleMouse(TextStorage* str) {
 	MEVENT event;
 	if(getmouse(&event) == OK) {
 		if(event.bstate & BUTTON1_PRESSED) {
-			str->x = event.x;
+			str->x = event.x-7;
 			str->y = str->bottom-str->height + event.y;
 		}else if(event.bstate & BUTTON4_PRESSED) {
 			appendTextStorage(str, 'a');
