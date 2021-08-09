@@ -5,6 +5,7 @@ DynamicString* createDynamicString() {
 	str->size = 2;
 	str->length = 0;
 	str->str = (char*)malloc(str->size+1);
+	str->str[0] = '\0';
 	return str;
 }
 
