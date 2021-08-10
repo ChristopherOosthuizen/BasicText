@@ -33,7 +33,7 @@ void writeToFile(char* file_name, TextStorage* storage) {
 	fclose(file);
 }
 
-void displayTextStorage(TextStorage* storage) {
+void displayTextStorage(TextStorage* storage, int blink) {
 	clear();
 
 	//attron(COLOR_PAIR(1));
@@ -41,13 +41,25 @@ void displayTextStorage(TextStorage* storage) {
 
 	for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
 			printw("%5d| ", i);
-			addstr(storage->strings[i]->str);
+			if(i == storage->y) {
+				DynamicString* str = createDynamicString();
+				addDynamicStrings(str, storage->strings[i]);
+				if(blink) {
+					insertDynamicString(str,'|', storage->x);
+				} else{
+					insertDynamicString(str,' ', storage->x);
+
+				}
+				addstr(str->str);
+				freeDynamicString(str);
+			}else {
+				addstr(storage->strings[i]->str);
+			}
 			addstr("\n");
 	}
 	//attroff(COLOR_PAIR(1));
 
 	refresh();
-	move(storage->y -top, storage->x+7);
 
 }
 
@@ -72,6 +84,8 @@ int main(int argc, char* argv[]) {
 	cbreak();
 	keypad(stdscr, true);
 	mouseinterval(0);
+	curs_set(0);
+	timeout(300);
 	mousemask(BUTTON1_PRESSED | BUTTON2_PRESSED | BUTTON3_PRESSED |
 		REPORT_MOUSE_POSITION, NULL);
 	struct winsize window_size;
@@ -88,9 +102,10 @@ int main(int argc, char* argv[]) {
 	setTopBottom(str, height-1, bottom);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_YELLOW);
-
-	displayTextStorage(str);
-		while(TRUE) {
+	int blink = 0;
+	displayTextStorage(str,blink);
+	while(TRUE) {
+		blink = !blink;
 		char c = getch();
 		if(c == 17) {
 			break;
@@ -99,7 +114,7 @@ int main(int argc, char* argv[]) {
 		} else {
 			appendTextStorage(str,c); 
 		}
-		displayTextStorage(str);
+		displayTextStorage(str,blink);
 		setHeight(str);
 
 		}
