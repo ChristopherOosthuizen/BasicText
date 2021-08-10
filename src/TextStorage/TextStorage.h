@@ -21,5 +21,5 @@ extern void backSpaceTextStorage(TextStorage* str);
 extern void freeTextStorage(TextStorage* str);
 extern DynamicString* getTextStorageText(TextStorage* str);
 extern DynamicString* getTextStorageTextColor(TextStorage* str);
-extern void setTopBottom(TextStorage* storage, int height, int bottom);
+extern void setTopBottom(TextStorage* storage, int height, int bottom, int width);
 #endif // TextStorage

@@ -23,10 +23,9 @@ void writeToFile(char* file_name, TextStorage* storage) {
 	file = fopen(file_name, "w+");
 	int height = storage->height;
 	int bottom = storage->bottom;
-	
-	setTopBottom(storage,storage->length, storage->length);
+	setTopBottom(storage,storage->length, storage->length, -1);
 	DynamicString* content = getTextStorageText(storage); 
-	setTopBottom(storage,height, bottom);
+	setTopBottom(storage,height, bottom, -1);
 
 	fprintf(file, content->str); 
 	freeDynamicString(content);
@@ -38,6 +37,7 @@ void displayTextStorage(TextStorage* storage, int blink) {
 
 	//attron(COLOR_PAIR(1));
 	int top = storage->bottom-storage->height;
+
 
 	for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
 			printw("%5d| ", i);
@@ -67,7 +67,8 @@ void setHeight(TextStorage* str) {
 	struct winsize window_size;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &window_size);
 	int height = window_size.ws_row; 
-		setTopBottom(str,height-1, str->bottom);
+        int width = window_size.ws_col;
+		setTopBottom(str,height-1, str->bottom, width);
 
 	
 }
@@ -99,7 +100,7 @@ int main(int argc, char* argv[]) {
 		bottom = height-1;
 	}
 
-	setTopBottom(str, height-1, bottom);
+	setTopBottom(str, height-1, bottom, width);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_YELLOW);
 	int blink = 0;

@@ -19,9 +19,16 @@ TextStorage* createTextStorage() {
 }
 
 // Set the top and bottom for displaying purposes
-void setTopBottom(TextStorage* storage, int height, int bottom) {
+void setTopBottom(TextStorage* storage, int height, int bottom, int width) {
 		storage->height = height;
 		storage->bottom = bottom;
+                if(width > 0) {
+                        int top = storage->bottom-storage->height;
+                        for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
+                                storage->height -= (storage->strings[i]->length+7)/width;
+                        }
+
+                }
 }
 
 // Create a new line at the end of the Text storage and if length excedes 
