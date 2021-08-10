@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
 	keypad(stdscr, true);
 	mouseinterval(0);
 	curs_set(0);
-	timeout(300);
+	timeout(1000);
 	mousemask(BUTTON1_PRESSED | BUTTON2_PRESSED | BUTTON3_PRESSED |
 		REPORT_MOUSE_POSITION, NULL);
 	struct winsize window_size;
