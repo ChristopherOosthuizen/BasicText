@@ -27,7 +27,7 @@ void writeToFile(char* file_name, TextStorage* storage) {
 	DynamicString* content = getTextStorageText(storage); 
 	setTopBottom(storage,height, bottom, -1);
 
-	fprintf(file, content->str); 
+	fputs(content->str, file); 
 	freeDynamicString(content);
 	fclose(file);
 }
@@ -35,12 +35,11 @@ void writeToFile(char* file_name, TextStorage* storage) {
 void displayTextStorage(TextStorage* storage, int blink) {
 	clear();
 
-	//attron(COLOR_PAIR(1));
 	int top = storage->bottom-storage->height;
 
 
 	for(int i = top; i< storage->length && i< storage->bottom+1; i++) {
-			printw("%5d| ", i);
+			printw("%5d | ", i);
 			if(i == storage->y) {
 				DynamicString* str = createDynamicString();
 				addDynamicStrings(str, storage->strings[i]);
@@ -57,7 +56,6 @@ void displayTextStorage(TextStorage* storage, int blink) {
 			}
 			addstr("\n");
 	}
-	//attroff(COLOR_PAIR(1));
 
 	refresh();
 
@@ -82,7 +80,6 @@ int main(int argc, char* argv[]) {
 	raw();
 	noecho();
 	clear();
-	cbreak();
 	keypad(stdscr, true);
 	mouseinterval(0);
 	curs_set(0);
